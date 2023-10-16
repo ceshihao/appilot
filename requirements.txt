@@ -62,3 +62,5 @@ watchfiles==0.19.0
 websocket-client==1.6.2
 websockets==11.0.3
 yarl==1.9.2
+alibabacloud-oos20190601==2.0.0
+alibabacloud-tea-openapi==0.3.7
