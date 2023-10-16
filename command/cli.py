@@ -14,6 +14,7 @@ from utils import utils
 from agent.agent import create_agent
 from walrus.toolkit import WalrusToolKit
 from k8s.toolkit import KubernetesToolKit
+from aliyun.toolkit import AliyunToolKit
 
 last_error = None
 
@@ -43,6 +44,9 @@ def setup_agent() -> Any:
     elif "walrus" in enabled_toolkits:
         walrus_toolkit = WalrusToolKit(llm=llm)
         tools.extend(walrus_toolkit.get_tools())
+    elif "aliyun" in enabled_toolkits:
+        aliyun_toolkit = AliyunToolKit(llm=llm)
+        tools.extend(aliyun_toolkit.get_tools())
     else:
         print(text.get("enable_no_toolkit"))
         sys.exit(1)
