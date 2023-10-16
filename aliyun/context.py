@@ -1,7 +1,5 @@
 from pydantic import BaseModel
 
-from walrus.client import WalrusClient
-
 
 class Context(BaseModel):
     execution_id: str = ""

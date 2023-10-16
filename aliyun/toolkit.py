@@ -3,7 +3,7 @@ import logging
 from langchain.schema.language_model import BaseLanguageModel
 
 from aliyun.client import AliyunClient
-from aliyun.tools.oos.manage_execution.tool import StartInstanceTool
+from aliyun.tools.oos.manage_execution.tool import StartInstanceTool, ListExecutionTool
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +29,7 @@ class AliyunToolKit:
         aliyun_client = self.aliyun_client
         llm = self.llm
         tools = [
-            StartInstanceTool(aliyun_client=aliyun_client)
-
+            StartInstanceTool(aliyun_client=aliyun_client),
+            ListExecutionTool(aliyun_client=aliyun_client)
         ]
         return tools
