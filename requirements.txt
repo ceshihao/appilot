@@ -9,6 +9,7 @@ certifi==2023.7.22
 charset-normalizer==3.2.0
 click==8.1.6
 colorama==0.4.6
+dashscope==1.13.1
 dataclasses-json==0.5.14
 exceptiongroup==1.1.2
 fastapi==0.100.1
@@ -18,8 +19,8 @@ h11==0.14.0
 httptools==0.6.0
 idna==3.4
 kubernetes==27.2.0
-langchain==0.0.271
-langsmith==0.0.26
+langchain==0.0.329
+langsmith==0.0.56
 markdown-it-py==3.0.0
 marshmallow==3.20.1
 mdurl==0.1.2

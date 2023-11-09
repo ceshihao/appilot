@@ -1,9 +1,11 @@
+import os
 import sys
 from typing import Any
 import readline
 
 
-from langchain.chat_models import ChatOpenAI
+from langchain.chat_models.openai import ChatOpenAI
+from langchain.chat_models.tongyi import ChatTongyi
 from langchain.memory import ConversationBufferMemory
 import colorama
 
@@ -23,11 +25,13 @@ def setup_agent() -> Any:
     config.init()
     colorama.init()
 
-    llm = ChatOpenAI(
-        model_name="gpt-4",
-        temperature=0,
-        callbacks=[handlers.PrintReasoningCallbackHandler()],
-    )
+    # llm = ChatOpenAI(
+    #     model_name="gpt-4",
+    #     temperature=0,
+    #     callbacks=[handlers.PrintReasoningCallbackHandler()],
+    # )
+    os.environ["DASHSCOPE_API_KEY"] = ''
+    llm = ChatTongyi()
 
     text.init_system_messages(llm)
 

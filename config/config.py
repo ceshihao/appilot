@@ -28,8 +28,8 @@ def init():
     show_reasoning = utils.get_env_bool("SHOW_REASONING", True)
     verbose = utils.get_env_bool("VERBOSE", False)
 
-    if not openai_api_key:
-        raise Exception("OPENAI_API_KEY is not set")
+    # if not openai_api_key:
+    #     raise Exception("OPENAI_API_KEY is not set")
 
     if not verbose:
         logging.basicConfig(level=logging.CRITICAL)
