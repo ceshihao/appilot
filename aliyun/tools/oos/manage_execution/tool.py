@@ -11,22 +11,35 @@ class StartInstanceTool(RequireApprovalTool):
 
     name = "start_instance"
     description = (
-        "Start an Aliyun ECS instance."
-        "Input should be an ECS instance id "
-        'Output OOS execution id'
+        "启动阿里云ECS实例。"
+        "输入json格式。包含InstanceIds，用户必须输入，是一个数组。"
+        "输出OOS执行Id。"
     )
     aliyun_client: AliyunClient
 
     def _run(self, text: str) -> str:
-        instance_id = text
 
         template_name = 'ACS-ECS-BulkyStartInstances'
-        parameters = ('{"OOSAssumeRole":"","targets":{"ResourceIds":["' + instance_id +
-                      '"],"RegionId":"cn-hangzhou","Type":"ResourceIds"},"regionId":"cn-hangzhou"}')
+        data = json.loads(text)
+        instance_ids = data.get("InstanceIds")
+        print(instance_ids)
+        targets = {
+            "RegionId": "cn-hangzhou",
+            "Type": "ResourceIds",
+            "ResourceIds": instance_ids
+        }
+        print(targets)
+        print(targets.get("ResourceIds"))
+        parameters = {
+            "OOSAssumeRole": "",
+            "targets": targets,
+            "regionId": "cn-hangzhou"
+        }
+        print(parameters)
 
         try:
             execution_id = self.aliyun_client.start_execution(
-                template_name, parameters
+                template_name, json.dumps(parameters)
             )
             # context = aliyun_context.set_default(execution_id=execution_id)
             # aliyun_context.update_context(context)
@@ -40,15 +53,16 @@ class ListExecutionTool(BaseTool):
 
     name = "list_execution"
     description = (
-        "List latest execution information."
-        "Input should be an OOS execution id."
-        "Output OOS execution information."
+        "查询OOS执行信息"
+        "输入json格式。包含ExecutionId，用户必须输入，是一个字符串。如果没有提供输入可以反问。"
+        "输出OOS执行的所有信息。"
     )
     aliyun_client: AliyunClient
 
     def _run(self, text: str) -> str:
         # execution_id = aliyun_context.GLOBAL_CONTEXT.execution_id
-        execution_id = text
+        data = json.loads(text)
+        execution_id = data.get("ExecutionId")
 
         try:
             execution = self.aliyun_client.list_executions(

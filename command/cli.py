@@ -31,7 +31,12 @@ def setup_agent() -> Any:
     #     callbacks=[handlers.PrintReasoningCallbackHandler()],
     # )
     os.environ["DASHSCOPE_API_KEY"] = ''
-    llm = ChatTongyi()
+    llm = ChatTongyi(
+        model_name="qwen-14b-chat",
+        temperature=0,
+        top_p=0.01,
+        callbacks=[handlers.PrintReasoningCallbackHandler()],
+    )
 
     text.init_system_messages(llm)
 
