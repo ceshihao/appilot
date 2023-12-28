@@ -109,7 +109,7 @@ class DescribeInstanceTool(BaseTool):
 
     name = "describe_instance"
     description = (
-        "查询ECS实例信息。"
+        "查询ECS实例的相关属性信息。"
         "输入json格式。包含ECS实例ID InstanceId，用户必须输入，是一个字符串。如果没有提供输入可以反问。"
         "输出ECS实例的所有信息。"
     )
@@ -134,7 +134,7 @@ class DescribeImageTool(BaseTool):
 
     name = "describe_image"
     description = (
-        "查询ECS镜像信息。"
+        "查询ECS镜像的相关属性信息。"
         "输入json格式。包含ECS镜像ID ImageId，用户必须输入，是一个字符串。如果没有提供输入可以反问。"
         "输出ECS镜像的所有信息。"
     )
@@ -143,12 +143,12 @@ class DescribeImageTool(BaseTool):
     def _run(self, text: str) -> str:
         # execution_id = aliyun_context.GLOBAL_CONTEXT.execution_id
         data = json.loads(text)
-        instance_id = data.get("ImageId")
+        image_id = data.get("ImageId")
 
         try:
-            instance = self.aliyun_client.describe_instances(
-                instance_id
+            image = self.aliyun_client.describe_images(
+                image_id
             )
-            return json.dumps(instance.to_map())
+            return json.dumps(image.to_map())
         except Exception as e:
             raise e
