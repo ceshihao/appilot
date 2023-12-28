@@ -22,27 +22,58 @@ class StartInstanceTool(RequireApprovalTool):
         template_name = 'ACS-ECS-BulkyStartInstances'
         data = json.loads(text)
         instance_ids = data.get("InstanceIds")
-        print(instance_ids)
         targets = {
             "RegionId": "cn-hangzhou",
             "Type": "ResourceIds",
             "ResourceIds": instance_ids
         }
-        print(targets)
-        print(targets.get("ResourceIds"))
         parameters = {
             "OOSAssumeRole": "",
             "targets": targets,
             "regionId": "cn-hangzhou"
         }
-        print(parameters)
 
         try:
             execution_id = self.aliyun_client.start_execution(
                 template_name, json.dumps(parameters)
             )
-            # context = aliyun_context.set_default(execution_id=execution_id)
-            # aliyun_context.update_context(context)
+            aliyun_context.set_default(execution_id=execution_id)
+            return execution_id
+        except Exception as e:
+            raise e
+
+class StopInstanceTool(RequireApprovalTool):
+    """Tool to get current project and environment context."""
+
+    name = "stop_instance"
+    description = (
+        "停止阿里云ECS实例。"
+        "输入json格式。包含InstanceIds，用户必须输入，是一个数组。"
+        "输出OOS执行Id。"
+    )
+    aliyun_client: AliyunClient
+
+    def _run(self, text: str) -> str:
+
+        template_name = 'ACS-ECS-BulkyStopInstances'
+        data = json.loads(text)
+        instance_ids = data.get("InstanceIds")
+        targets = {
+            "RegionId": "cn-hangzhou",
+            "Type": "ResourceIds",
+            "ResourceIds": instance_ids
+        }
+        parameters = {
+            "OOSAssumeRole": "",
+            "targets": targets,
+            "regionId": "cn-hangzhou"
+        }
+
+        try:
+            execution_id = self.aliyun_client.start_execution(
+                template_name, json.dumps(parameters)
+            )
+            aliyun_context.set_default(execution_id=execution_id)
             return execution_id
         except Exception as e:
             raise e
@@ -53,7 +84,7 @@ class ListExecutionTool(BaseTool):
 
     name = "list_execution"
     description = (
-        "查询OOS执行信息"
+        "查询OOS执行信息。"
         "输入json格式。包含ExecutionId，用户必须输入，是一个字符串。如果没有提供输入可以反问。"
         "输出OOS执行的所有信息。"
     )
@@ -69,5 +100,55 @@ class ListExecutionTool(BaseTool):
                 execution_id
             )
             return json.dumps(execution.to_map())
+        except Exception as e:
+            raise e
+
+
+class DescribeInstanceTool(BaseTool):
+    """Tool to change project and environment context."""
+
+    name = "describe_instance"
+    description = (
+        "查询ECS实例信息。"
+        "输入json格式。包含ECS实例ID InstanceId，用户必须输入，是一个字符串。如果没有提供输入可以反问。"
+        "输出ECS实例的所有信息。"
+    )
+    aliyun_client: AliyunClient
+
+    def _run(self, text: str) -> str:
+        # execution_id = aliyun_context.GLOBAL_CONTEXT.execution_id
+        data = json.loads(text)
+        instance_id = data.get("InstanceId")
+
+        try:
+            instance = self.aliyun_client.describe_instances(
+                instance_id
+            )
+            return json.dumps(instance.to_map())
+        except Exception as e:
+            raise e
+
+
+class DescribeImageTool(BaseTool):
+    """Tool to change project and environment context."""
+
+    name = "describe_image"
+    description = (
+        "查询ECS镜像信息。"
+        "输入json格式。包含ECS镜像ID ImageId，用户必须输入，是一个字符串。如果没有提供输入可以反问。"
+        "输出ECS镜像的所有信息。"
+    )
+    aliyun_client: AliyunClient
+
+    def _run(self, text: str) -> str:
+        # execution_id = aliyun_context.GLOBAL_CONTEXT.execution_id
+        data = json.loads(text)
+        instance_id = data.get("ImageId")
+
+        try:
+            instance = self.aliyun_client.describe_instances(
+                instance_id
+            )
+            return json.dumps(instance.to_map())
         except Exception as e:
             raise e
